@@ -1,0 +1,673 @@
+---
+title: "20200525_myReport"
+author: "fbdincaslan"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 5
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+)
+```
+# Report {.tabset}
+
+## miRNAs and miRNA sequencing 
+microRNAs (miRNAs) belong the family of small non-coding RNAs and regulate many processes in the body via regulating the mRNAs. They are 20 to 25-nucleotides-long small RNAs. Since they are short, and sequences vary only small number of nucleotides (e.g. 1 as in the case of SNPs), deep sequencing, high coverage, requires to detect the miRNAs, and identify the novel sequences sensitively.
+
+- > "Single-cell microRNA-mRNA co-sequencing reveals non-genetic heterogeneity and mechanisms of microRNA regulation"
+([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/s41467-018-07981-6))
+
+  - 19 single cells,
+    * half mRNAs half miRNAs
+    * strong anti-correlation of miRNA-mRNAs of each single cells
+    * "validaiton of miRNA mediated degredation of target transcripts"
+    * non-genetic cell-to-cell variability
+    * post-transcriptionally
+    * miRNA variability modulation by protein-coding genes
+  - mRNAs
+    * SMART-Seq.v4 kit for processing poly-A tailed mRNAs
+    * full-length library generation
+  - K562
+    * RPMI 1640 media+10%FBS
+  - MCF7
+    * DMEM+10%FBS+1%PenStrepGlut
+  - no mycoplasma test
+  - For single cell lyysis, 10ul lysis buffer (0.25TritonX-100, +U recombinant RNAse Inhibitor) added, 
+    * stored at -80 after thawing, 
+    * incubated at 72C for 20min or 75C for 5min to release miRNAs
+    * then splitted to two 5ul halves
+    
+  - miRNA
+    * single cell lysate-heated
+    * sequences ending with OH
+    * sequntial ligation with 3' and 5'- adaptors
+    * add 3'-adapter by adding 5.24ul of adapter ligation mix to 5ul half cell lysate
+      * mix:
+        * 1pmol 3' adapter
+        * 1.66ul 50% PEG 8000
+       * 250U T4 RNA Ligase 2 truncated KQ
+        * 0.83ul 10*T4 RNA ligase buffer
+        * U recombinant RNase Inhibitor
+      - incubated at 30C for 6h
+      - then 4C for 10h
+      - Next, 5ul adapter-digestion mixture added
+      - mix:
+        * 10pmol RT primer
+        * 5U Lambda exonuclease
+       * 5U 5' deadenylase
+      - incubated at 30C for 15min
+      - then 37C for 15min
+      - Next, 5ul 5' adapter ligation mix added
+      - mix:
+        * 10pmol 5' adapter oligo
+        * 10U T4 RNA ligase 1
+        * 1ul T4 RNA ligase buffer
+        * 2ul 50% PEG 8000
+        * incubate at 37C for 1h
+      - reverse transcription
+        * RT in 3 steps by using M-MLV RT
+        * 5ul of RT mix added (10pmol RT primer)
+        * incubated at 65C for 5min
+      - mixtrue of 2.1ul 5*First Strand buffer, 0.3ul water, 0.8ul 0.1M DTT added
+        * incubated at 42C for 30min
+        * 3.3ul RT reaction including 0.6ul M-MLV RT, 1ul 5*First Strand buffer, 0.3ul water, 0.8ul 0.1M DTT, 0.6ul 10mM dNTP mix
+        * incubated at 42C for 2h
+      - PCR amplification
+        * PCR in 2 steps
+        * 35ul of reagens including, 3.5ul 10X ThermoPol Reaction buffer, 0.7ul 10nM dNTP mix, 35pmol RT primer oligo, 35pmol PCR primer oligo, 0.5ul Taq DNA Polymerase, 23.3ul water
+        * incubated at 98C for 30s
+        * 13 cycles of 98C 10s
+        * 60C for 30s
+        * 72C for 30s
+        * final incubation at 72C for 5h
+      - 1ul of amplified product was taken and 
+      - 25ul of second PCR reaction added including 10uM indexed primer, 10mM 5' Illumina PCR primer, 2.5ul 10*ThermoPol Reaction buffer, 0.5ul Taq DNA polymerase, 0.5ul 10mM dNTP mix
+        * incubated at 98C for 30s
+        * 13 cycles of 98C 10s
+        * 67C for 30s
+        * 72C for 30s
+        * final incubation at 72C for 5h  
+  - 140bp PCR products chosen
+  - library preperation
+  - next-generation sequencing
+    * Illumina HiSeq 2000
+    
+  --------
+
+  - smRNA seqeunce analysis
+    * miRDeep2 is used
+    * adapter removal
+    * reads collapsed witht the same sequence
+    * reads shorter than 15bp removed
+    * mapped to miRNA precursors from miRBASE.v21, zero mismacthes
+    * quanitified by mRDeep2
+
+
+- > "Single-cell sequencing of the small-RNA transcriptome"
+([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/nbt.3701))
+    - "heteroneity of small RNA expression in a single cell"
+    - analysis of miRNAs, fragments of tRNAs, snoRNAs 
+    - Ligating adapters to all RNA species harboring 5' phosphate and 3' hydroxly group without any size discrimination
+    - Masking oligos to eliminate 5.8S RNA
+    - Enzymatic digesiton to reduce adapter dimers
+    - UMIs to 5' adapters to eliminate PCR duplicates
+    - No size selection step, so sutaible for automation, but computational selection of small RNAs
+    - assigning sequenced reads to various smRNA classes by using 
+      * Gencode, 
+      * mirBase, 
+     * GtRNAdb
+    - description of small RNAs, 18-40nts long
+      * ~22 nts for miRNA
+      * 33 and 19 nts for tsRNAs
+      * 29 and 38 nts for sdRNAs
+      * capturing the processed small RNAs, but not intermediate products
+      * mRNA-derived smRNAs length varies bw 18-31 nts
+    - poor correlation between miRNA and pre-miRNA, might be due to
+      * short half-live of miRNAs
+      * secondary structures of pre-miRNAs
+    - Could sc smRNA expression profile distinguish cell type?
+      * hierarchical clustering of sc miRNAs
+      * tSNEs
+    - Smart-Seq2 mRNA profile as a positive control to seperate cell types
+    - Sensitivity and quantitaive accuracy of miRNA seq of sc,
+      * pg
+      * ng- level small RNA sequencing performed.
+      * 1ng to 10pg
+      * 1000ng as a positive control
+      * high correlation until 1ng, then starst to decline
+    - For lowly expressed genes, increased miRNA variation
+    - Propidium iodide (PI) to sort out dead cells in 96-well plate
+ 
+ -------
+ 
+   - 3ul lysis buffer including 
+      * 0.13% TritonX-100, 
+      * 4U recombinant RNAse Inhibitor
+    - After sorting, 96 well palte including single cells were transferred to -80 C for storage
+    - After thawing,
+    - add 1ul of 5.8S rRNA masking oligı (5pmol)
+      * incubation at 72C for 20min
+    - then, add 2ul of 3' adapter ligation mix
+      * 20pmol 3' adapter oligo
+      * 8.33% PEG 8000
+      * 50U T4 RNA Ligase 2, truncated KQ
+      * 0.83 T4 RNA ligase buffer
+      * 4U recombinant RNAse Inhibitor
+      * incubated at 30C for 6h
+      * then, 4C for 10h
+    - Next, add 3ul RT primer and enyzme to remove adapter
+      * 200pmol RT primer
+      * 2.5U Lambda exonuclease
+      * 10U 5' deadenylase
+      * incubate at 30C for 15min
+      * then, 37C for 15 min
+    - Then, add 2ul f 5' adapter ligation mix
+      * 45pmol 5' adapter oligo,
+      * 0.68mM Tris-buffered ATP
+      * 4U T4 RNA ligase
+      * 0.23 T4 RNA ligase buffer
+      * incubate at 37C for 1hr
+    - Next,  RT by adding 7ul of RT mix
+      * 1.28 Taq DNA Polymerase PCR Buffer
+      * 8.33 mM DTT
+      * 0.42 mM for each dNTP
+      * 4U recombinant RNAse Inhibitor
+      * 150U superscript II RT
+   - Then, PCR amplification by adding 35ul of mix
+      * 0.94*Phısion HF Buffer
+      * 1U Phusion Hot Start II DNA Polymerase
+      * 0.12 mM for each dNTP
+      * 1.89 uM RP1 primer
+      * incubated at 98C for 30s
+        * 13 cycels of 98C for 10s
+        * 60C or 30s
+        * 72C for 30s
+       * Final incubation at 72C for 5 min
+      * Next, add 25ul of second reaction to 1ul of amplified product
+        - 2uM indexed primers
+        - 0.2uM RP1 primer
+        - 1*Phusion HF buffer
+        - 0.5U Phusion Hot Start II DNA Polymerase
+        - 0.2m mM for each dNTP
+        - incubated at 98C for 30s
+          * 13 cycles at 98C for 10s
+          * 67C for 30s
+          * 72C for 30s
+          * Final incubation at 72C for 5min
+        - Amplified library purification with DNA Clean and Concentrator
+      - Sequencing of 43/52 bp primers 
+        * by using Ilumina HiSeq 2500
+    - Analysis
+      * UMIs removed
+      * adapter and polyA tails removed b cutadapt v1.8.1
+      * reads shorter than 18 nts excluded
+      * aligned to hg38 via STARv2.4.0
+      * reads shorther than 40nts were assigned as potential miRNAs
+      * libraries fewer than 1million reads and s.d greater than 2 removed
+      * https://github.com/eyay/smallseq
+
+- > "Decreasing miRNA sequencing bias using a single adapter and circularization approach"
+([via](https://genomebiology-biomedcentral-com.libproxy1.nus.edu.sg/articles/10.1186/s13059-018-1488-z#Sec5))
+    * ligation of miRNAs with single adapter and circularization of the ligation product 
+      - to reduce miRNA sequencing bias (poor accuracy),
+      - so identification of increased number of miRNAs
+    * "novel miRNAs, sequence variants isomiRs"
+    * one of the reasons for the bias inefficient/sequence-dependent ligation of mRNAs to sequencing adapters
+    ...will continue
+
+- > "Next-Generation Sequencing for MicroRNA Expression Profile"
+([via](https://link-springer-com.libproxy1.nus.edu.sg/protocol/10.1007%2F978-1-4939-7046-9_12))
+- > "Evaluation of methodologies for microRNA biomarker detection by next generation sequencing"
+([via](https://www-ncbi-nlm-nih-gov.libproxy1.nus.edu.sg/pmc/articles/PMC6161688/pdf/krnb-15-08-1514236.pdf))
+- > "Bias in Ligation-Based Small RNA Sequencing Library Construction Is Determined by Adaptor and RNA Structure"
+([via](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0126049))
+- > "Biases in small RNA deep sequencing data"
+([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/nprot.2006.161))
+- > "Two decades of miRNA biology: lessons and challenges"
+([via](https://rnajournal-cshlp-org.libproxy1.nus.edu.sg/content/21/4/675.full))
+- > "Methodological challenges inutilizing miRNAs as circulating biomarkers"
+([via](https://www-ncbi-nlm-nih-gov.libproxy1.nus.edu.sg/pmc/articles/PMC3943687/pdf/jcmm0018-0371.pdf))
+- > "Potential Pitfalls in microRNA Profiling"
+([via](https://www-ncbi-nlm-nih-gov.libproxy1.nus.edu.sg/pmc/articles/PMC3597218/pdf/nihms-369747.pdf))
+- > "MicroRNA profiling: separating signal from noise"
+([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/nmeth0910-687))
+- > "Next Generation Sequencing of miRNAs – Strategies,  Resources and Methods"
+([via](https://www-ncbi-nlm-nih-gov.libproxy1.nus.edu.sg/pmc/articles/PMC3960865/pdf/genes-01-00070.pdf))
+- > "MicroRNA Discovery and Profiling in Human Embryonic Stem Cells by Deep Sequencing of Small RNA Libraries"
+([via](https://stemcellsjournals-onlinelibrary-wiley-com.libproxy1.nus.edu.sg/doi/full/10.1634/stemcells.2008-0356))
+- > "220-plex microRNA expression profile of a single cell"
+([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/nprot.2006.161))
+- For detection cell culture type specific miRNAs
+- > "miRmine: a database of human miRNA expression profiles"
+([via](https://academic-oup-com.libproxy1.nus.edu.sg/bioinformatics/article/33/10/1554/2929341))
+- > "Cell-type-specific signatures of microRNAs on target mRNA expression"
+([via](https://www-pnas-org.libproxy1.nus.edu.sg/content/103/8/2746))
+
+
+## miRNA-seq analysis
+
+There are different tools available to investigate miRNAs, miRNA structures, expression profiles of them and so on. Although RNA-sequencing technology is still in teenage years ( `Stark et al., 2019` ), miRNA sequencing technology is even more “immature” than RNA-seq or sc-RNA- seq, so do the tools available for miRNA-sequencing data analysis. Besides, there are limited number of tools available for bioinformatics analysis for mirNA sequencing ( `Motameny et al., 2010; Kang and Friedlander, 2015; Chen et al., 2019 `). miRDeep2 ( `Mackowiak, S., 2011; Friedlander et al., 2012; Yang et al., 2011 `)^[A footnote here.] is one of the most commonly used and recently updated tools to detect known, canonical, and novel, non-canonical, miRNA sequences. Although, the pipelines are available for miRNA sequencing as in the case of ENCODE Project Pipelines, the bioinformatics tools such as miRDeep2 are easier to use people coming from different scientific backgrounds.
+
+*** This part is removed ***
+
+### Pre-analysis
+
+The quality of the sequencing were assessed.
+
+```{r, echo=FALSE}
+library(kableExtra)
+setwd("C:/Users/USER/Documents")
+mytable<-read.csv("counts_miseq_updated.csv")
+
+kable(mytable) %>%
+  kable_styling(font_size = 9) %>%
+  scroll_box(width = "100%", height = "400px")
+
+```
+
+### mirDeep2 results
+
+The reads having at least more than 1 read mapped in bowtie were analyzed with mirDeep2. Then the samples having mirDeep2 profile were compared. Top 20 highly expressed miRNAs, if available, were selected for the expression profile comparison.
+
+```{r, echo=FALSE}
+setwd("C:/Users/USER/Documents")
+mirdeepTop20<-read.csv("mirDeep_results_to_compare.csv")
+
+kable(mirdeepTop20) %>%
+  kable_styling(font_size = 9) %>%
+  scroll_box(width = "100%", height = "700px")
+
+```
+
+#### Heatmap
+
+Heatmap of top 20 expressed miRNAs. The samples without enough miRNAs were not included. Heatmap default options were used (distance method = "euclidean" and hclust method = "complete").
+
+```{r, echo=FALSE}
+miRNAs<-read.table("miRNAs.txt", header = TRUE)
+View(miRNAs)
+row.names(miRNAs)<-miRNAs$miRNAs
+miRNAS<-miRNAs[,-1]
+
+#heatmap
+df <- scale(miRNAS)
+heatmap(df, scale = "row", margins = c(9,6))
+library("RColorBrewer")
+col <- colorRampPalette(brewer.pal(10, "RdYlBu"))(256)
+
+```
+
+#### PCA
+Principal componenet analysis of samples having similar profile grouped together.
+```{r, echo=FALSE}
+library(ggplot2)
+#PCA
+library(factoextra)
+res.pca <- prcomp(t(df), scale = TRUE)
+fviz_pca_ind(res.pca,
+             col.ind = "cos2", 
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE,
+             label.size=3, 
+)
+
+
+
+
+
+```
+
+*** This part is removed ***
+
+### Conclusion
+
+*** This part is removed *** 
+
+#### What I have done
+
+*** This part is removed ***
+
+#### For future
+
+*** This part is removed ***
+
+
+## 05.05.2020
+
+### Datasets
+
+Protocol based sc-RNA set dataset number is very limited. Besides most of them does not have tSNE graph since the target of the paper is different.
+However, I found these articles having nice graphs generated by Seurat (human datasets). 
+
+- > Multiplexed detection of proteins, transcriptomes, clonotypes and CRISPR perturbations in single cells ([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/s41592-019-0392-0#Sec2))
+- > Integrating single-cell transcriptomic data across different conditions, technologies, and species ([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/nbt.4096#Sec45))
+- > Single-cell RNA-seq of rheumatoid arthritis synovial tissue using low-cost microfluidic instrumentation ([via](Single-cell RNA-seq of rheumatoid arthritis synovial tissue using low-cost microfluidic instrumentation))
+- > Seq-Well: portable, low-cost RNA sequencing of single cells at high throughput ([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/nmeth.4179#Sec2))
+
+For small RNA-sequencing
+
+- > Tumor microRNAs Identified by Small RNA Sequencing as Potential Response Predictors in Locally Advanced Rectal Cancer Patients Treated With Neoadjuvant Chemoradiotherapy ([via](http://cgp.iiarjournals.org.libproxy1.nus.edu.sg/content/17/3/249.long))
+- > microRNA profiling in the aqueous humor of highly myopic eyes using next generation sequencing (uses miRDeep2) ([via](https://www-sciencedirect-com.libproxy1.nus.edu.sg/science/article/pii/S0014483520302931?via%3Dihub#sec2))
+- > Systematic Analysis of Transcriptomic Profile of the Effects of Low Dose Atropine Treatment on Scleral Fibroblasts using Next-Generation Sequencing and Bioinformatics (uses miRDeep2) ([via](https://www.medsci.org/v16p1652.htm))
+- > Comprehensive assessment of multiple biases in small RNA sequencing reveals significant differences in the performance of widely used methods ([via](https://bmcgenomics-biomedcentral-com.libproxy1.nus.edu.sg/articles/10.1186/s12864-019-5870-3#Sec34))
+- > Comprehensive multi-center assessment of small RNA-seq methods for quantitative miRNA profiling ([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/nbt.4183#Sec10))
+
+
+
+Single cell miRNA sequencing
+
+- > Single-cell sequencing of the small-RNA transcriptome ([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/nbt.3701#Sec2))
+
+#### Introductory Analysis
+
+Will be focus on better visualizations.
+
+```{r, echo=FALSE}
+setwd("C:/Users/USER/Documents")
+dataset<-read.table("dataset.txt", header=TRUE)
+dataset <- unique(dataset)
+rownames(dataset)<-dataset$miRNA
+dataset<-dataset[,-1]
+dataset <- dataset[rowSums(dataset)>0, ]
+library(DESeq2)
+primed<-dataset[ , grep('primed', colnames(dataset), value=F)]
+naive<-dataset[ , grep('naive', colnames(dataset), value=F)]
+concat<-cbind(primed, naive)
+
+library(Rtsne)
+tsneout <- Rtsne(t(concat))
+library(readr)
+pca2 <- princomp(tsneout$Y)
+
+colors <- rainbow(length(unique(names(concat))))
+names(colors) <- unique(names(concat))
+library(ggplot2)
+library(knitr)
+
+```
+
+```{r pressure, echo=FALSE, fig.cap="Primed vs naive cells in clusters (PCA)", out.width = '100%'}
+knitr::include_graphics("PCA_komple.png")
+```
+
+```{r, echo=FALSE}
+dataset2 <- scale(dataset)
+col <- colorRampPalette(brewer.pal(10, "RdYlBu"))(256)
+heatmap(dataset2, scale = "row", cexRow = 0.4 )
+
+```
+Heatmap of normalized counts (based on the paper).
+
+- > "Single-cell microRNA-mRNA co-sequencing reveals non-genetic heterogeneity and mechanisms of microRNA regulation"
+([via](https://www-nature-com.libproxy1.nus.edu.sg/articles/s41467-018-07981-6))
+
+The dataset will be analyzed from scratch (since the raw count file is not provided)
+
+### For previous data 
+(whole miRNAs of the last experiment)
+
+- S26: 24 cycle MCF7
+- S27: 24 cycle HEPG2
+- S28: 21 cycle MCF7
+- S29: 21 cycle HEPG2
+
+```{r, echo=FALSE}
+mymirna<-read.table("MymiRNAs.txt", header=TRUE)
+mymirna_unique <- unique(mymirna)
+rownames(mymirna_unique)<-mymirna_unique$miRNA
+mymirna_unique<-mymirna_unique[,-c(1,2)]
+mymirna2 <- mymirna_unique[rowSums(mymirna_unique)>10, ]
+
+mymirnam <- scale(mymirna2)
+heatmap(mymirnam, scale = "row", cexRow = 0.4 )
+library("RColorBrewer")
+col <- colorRampPalette(brewer.pal(10, "RdYlBu"))(256)
+
+
+
+```
+
+```{r, echo=FALSE}
+library(ggplot2)
+#PCA
+library(factoextra)
+rest.pca <- prcomp(t(mymirnam), scale = TRUE)
+
+library(ggpubr)
+library(ggfortify)
+
+autoplot(rest.pca, data = t(mymirnam), label = TRUE, label.size = 3, color=names(mymirnam))
+
+
+```
+
+### Pipeline
+
+*** This part is removed ***
+
+### Report
+
+There are couple of cancer single cell miRNA seq files available online which can be found in TCGAas well.
+
+-> TCGA sc-miRNA datasets available ([via](https://portal.gdc.cancer.gov/exploration?filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.summary.experimental_strategies.experimental_strategy%22%2C%22value%22%3A%5B%22miRNA-Seq%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22genes.is_cancer_gene_census%22%2C%22value%22%3A%5B%22true%22%5D%7D%7D%5D%7D))
+
+Check the original papers of these files to compare tSNE results
+
+## 11.05.2020 
+
+### single cell miRNA-mRNA co-sequencing
+
+- >  One has 20 cells (K562-all from same condition),
+
+And unfortunately the raw data was not provided. So, I need to renalayze the data from the beginning.
+
+- > Raw files were downloded, analyzed by using the same pipeline of our datasets.
+
+### single cell miRNA transcriptome of cancer and stem cells
+
+- >  the other has more than 50 cells, which are (HEK293T and glioblastoma, a type of brain cancer, cells (U87, KS4, JM3, JM4), and hESCs(naive and primed)):
+
+    * 41 nucleotide read length (w/o UMI)
+    * 11 HEK293T
+    * 11 JM3
+    * 12 JM4
+    * 12 KS4
+    * 12 U87
+    * 23 naive
+    * 11 primed
+
+    * 33 nucleotide read length (w/o UMI)
+    * 18 HEK
+    * 11 HEK_fresh
+    * 5 HEK_mask1_368_spike_1cell
+    * 22 JM3
+    * 13 JM4
+    * 17 JM4_DRAQ5
+    * 13 KS4
+    * 22 KS4_DRAQ5
+    * 22 U87
+    * 39 naive (w/o rRNA mask)
+    * 44 primed (w/o rRNA mask)
+    * 35 naive
+    * 35 primed
+
+    * 43 nucleoitide length read SMART-Seq2
+    * 18 HEK
+    * 21 naive
+    * 21 primed
+
+    * SMART-seq serial dilution libraries (HEK293T)
+    * SMART-seq serial dilution and NEBNext libraries (HEK293T)
+    * in which additional details are given in the supplementary table 3 of the relevant paper.
+
+#### For All
+
+There are three main type of cells in this paper, which are human embryonic stem cells (hESCs, either native or primed state), human embryonic kidney cells (HEK293) and different glioblastoma cell lines.
+
+```{r, echo=FALSE, fig.cap="All cells in clusters, tSNE for  all", out.width = '100%'}
+setwd("C:/Users/USER/Documents")
+library(cowplot)
+library(ggplot2)
+library(magick)
+
+knitr::include_graphics("tSNE_All.png")
+
+
+```
+In this tSNE graph above, when the graph is splitted (not shown), most of them are splitted based on the cell line. 
+
+```{r, echo=FALSE, fig.cap ="Top differentially expressed miRNAs among different cell lines", out.width = '100%'}
+knitr::include_graphics("TopMiRNAs_All.png")
+
+```
+
+Although, top distinctive miRNA profiles are given (mostly based on cell line specific), the information above is not useful for us know. 
+
+#### For Naive vs. Primed Stem Cells
+
+hESCs in either naive or primed state were sequenced to see whether there is a distinctive pattern of miRNA expression and how this information can be useful to determine the targets.
+
+```{r, echo=FALSE, fig.cap="Naive vs. primed cells in clusters. a) UMAP for splitted graphs based on  and b) tSNE for  all", out.width = '100%'}
+
+p3 <- ggdraw() + draw_image("np_splitted_UMAP.png", scale = 0.9)
+p4 <- ggdraw() + draw_image("np_tSNE.png", scale = 0.9)
+
+plot_grid(p3, p4)
+
+```
+Based on the graph above, it can be concluded that there are two different subsets of naive stem cells (if there is no such batch effect) while primed cells are clustered as one despite of the different sequening options (i.e. different read length, withor without rRNA masking).
+
+There is no such data available to compare for stem cell miRNA properties in miRmine unfortunately. However, most of the top differentially expressed miRNAs belong to naive state of the embryonic stem cells.
+
+```{r, echo=FALSE, fig.cap="Top differentially expressed miRNAs in naive vs. primed cells", out.width = '100%'}
+knitr::include_graphics("np_DoHeatmap_label.png")
+
+```
+
+#### Embryonic Stem Cells vs. Human Embryonic Kidney Cells
+
+```{r, echo=FALSE, fig.cap="Embryonic stem cells and HEK293 cells in clusters. a) UMAP for splitted graphs based on  and b) tSNE for  all", out.width = '100%'}
+
+p7 <- ggdraw() + draw_image("nph_UMAP_split.png", scale = 0.9)
+p8 <- ggdraw() + draw_image("nph_tSNE.png", scale = 0.9)
+
+plot_grid(p7, p8)
+
+```
+
+There is no such data available to compare for stem cell miRNA properties in miRmine unfortunately. However, most of the top differentially expressed miRNAs belong to naive state of the embryonic stem cells. ALhtough, hsa-let-7a-2-3p is one of the top miRNAs expressed in HEK-293 in miRmine, there is no conensus in this dataset.
+
+Top miRNAs for HEK-293 in miRmine are:
+
+  1. hsa-let-7a-2-3p
+  2. hsa-let-7b-3p   
+  3. hsa-miR-1-3p
+  4. hsa-miR-1-3p  
+  5. hsa-miR-1-5p
+
+```{r, echo=FALSE, fig.cap="Top differentially expressed miRNAs in embryonic cells", out.width = '100%'}
+knitr::include_graphics("nph_DoHeatmap.png")
+
+```
+
+When you look at the groups in detail:
+
+```{r, echo=FALSE, fig.cap="Embryonic stem cells and HEK293 cells in clusters, detailed subgroups. a) UMAP for splitted graphs based on  and b) tSNE for  all", out.width = '100%'}
+
+p9 <- ggdraw() + draw_image("nph_det_UMAP_split.png", scale = 0.9)
+p10 <- ggdraw() + draw_image("nph_det_tSNE.png", scale = 0.9)
+
+plot_grid(p9, p10)
+
+```
+
+```{r, echo=FALSE, fig.cap="Top differentially expressed miRNAs in embryonic cells, detailed subgroups", out.width = '100%'}
+knitr::include_graphics("nph_det_heatmap.png")
+
+```
+Although, the top differently expressed miRNAS are very similar for same state/type of cell, read lenght might contribute the difference in this population.
+
+#### For Glioblastoma Cell
+
+
+```{r, echo=FALSE, fig.cap="Glioblastoma cells in clusters. a) UMAP for splitted graphs based on  and b) tSNE for  all", out.width = '100%'}
+
+p5 <- ggdraw() + draw_image("bc_UMAP_split.png", scale = 0.9)
+p6 <- ggdraw() + draw_image("bc_tSNE.png", scale = 0.9)
+
+plot_grid(p5, p6)
+
+```
+
+In miRmine, the chracteristic miRNA for glioblastoma is  no available. However, for the closest option, embronal brain tumor, the top 5 distinctive miRNA are:
+
+  1. hsa-let-7f-2-3p
+  2. hsa-miR-1-3p 
+  3. hsa-miR-1-3p
+  4. hsa-miR-1-5p  
+  5. hsa-miR-103b
+
+It is the distinctive miRNA for the second cluster. Besides there are many other subset of top miRNAs which were not stated in the miRmine for different glioblastoma cell lines can be found by single cell RNA seq.
+
+```{r, echo=FALSE, fig.cap="Top differentially expressed miRNAs for different gliobasltoma cell lines", out.width = '100%'}
+knitr::include_graphics("bc_DoHeatmap_all.png")
+
+```
+
+If you look at the subgroups in detail:
+
+
+```{r, echo=FALSE, fig.cap="Glioblastoma cells in clusters, detailed. a) UMAP for splitted graphs based on  and b) tSNE for  all", out.width = '100%'}
+
+p11 <- ggdraw() + draw_image("bc_detailed_UMAsplit.png", scale = 0.9)
+p12 <- ggdraw() + draw_image("bc_detailed_tSNE.png", scale = 0.9)
+
+plot_grid(p11, p12)
+```
+
+```{r, echo=FALSE, fig.cap="Top differentially expressed miRNAs for different gliobasltoma cell lines, in detailed subgroups", out.width = '100%'}
+# top10.bc<-read.csv("top10_bc.txt",header = TRUE)
+# top10.bc
+knitr::include_graphics("bc_detailed_heatmap.png")
+
+```
+Although the general pattern of miRNA expression is very similar for same type of cell lines. The expression profile of individual cells for same batch differs a lot compared to stem cells, which might be due to higher heterogeneity of brain tumor cells.
+
+#### Conclusions
+
+- > The read length might contribute the difference in the expression pattern for miRNAs
+
+- > Brain tumor cells might have higher level of heterogeneity of miRNA expression profile compared to any other cell type analyzed in this paper.
+
+## The analysis to compare
+
+- > For stem cells+cancer cells+HEK cells miRNA sequencing paper, the counts given in GEO was used.
+
+- > For K562 cell only miRNA-mRNA co-sequencing paper, the counts were analyzed by using the same pipeline with our data. miRDeep2 counts were used.
+
+*** This part is removed ***
+
+
+- > The miRNAs having zero values for all the cell types were removed.
+
+- > For the remaining miRNAs (800< in total, not intersect but union), Seurat was used to further analyze the data.
+
+Here are some of the results we have so far:
+
+*** This part is removed ***
+
+### Conclusion
+
+*** This part is removed ***
