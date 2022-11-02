@@ -3,9 +3,9 @@
 3.  Download the selected accession by using "Select">"Selected">"Accession List" 
 4.  Use this txt file to give as a input for the below code to download only the relevant fastq files together.
 
-### how to download sratools to run fasts-dump: https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit
-### for my case, it did not work for the configuration step, so I downloaded sratoolkit via homebrew
-### home-brew details: https://docs.brew.sh/Installation
+> how to download sratools to run fasts-dump: https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit
+> for my case, it did not work for the configuration step, so I downloaded sratoolkit via homebrew
+> home-brew details: https://docs.brew.sh/Installation
 ```shell
   git clone https://github.com/Homebrew/brew homebrew
   eval "$(homebrew/bin/brew shellenv)"
