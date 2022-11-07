@@ -35,7 +35,9 @@ try echo run to see how it works
  ```
 
 > outcome will be fasterq-dump --split-file for each line, in this case
+
 > fasterq-dump --split-files SRR14783059 -O /your/path/to/outdir/
+
 > fasterq-dump --split-files SRR14783060 -O /your/path/to/outdir/
 
 it basically reads each accession line by line and retrieve via faster- dump
