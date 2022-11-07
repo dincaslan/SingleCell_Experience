@@ -26,16 +26,17 @@
 
 try echo run to see how it works
 ```shell
-  input="/your/path/to/SRR_Acc_List.txt"
+  input=/your/path/to/SRR_Acc_List.txt
+  output=/your/path/to/outdir/
   while IFS= read -r line
   do
-  echo	" fasterq-dump --split-files $line "
+  echo	" fasterq-dump --split-files $line -O $output "
   done < "$input"
  ```
 
 > outcome will be fasterq-dump --split-file for each line, in this case
-> SRR14783059
-> SRR14783060
+> fasterq-dump --split-files SRR14783059 -O /your/path/to/outdir/
+> fasterq-dump --split-files SRR14783060 -O /your/path/to/outdir/
 
 it basically reads each accession line by line and retrieve via faster- dump
 
@@ -44,9 +45,10 @@ it basically reads each accession line by line and retrieve via faster- dump
 
 ```shell
   #!/bin/bash
-  input="/your/path/to/SRR_Acc_List.txt"
+  input=/your/path/to/SRR_Acc_List.txt
+  output=/your/path/to/outdir/
   while IFS= read -r line
   do
-    fasterq-dump --split-files $line
+    fasterq-dump --split-files $line -O $output
   done < "$input"
 ```
