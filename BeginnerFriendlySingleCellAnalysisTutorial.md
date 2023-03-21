@@ -49,7 +49,7 @@ If you are not sure what to expect from this report, please check out the tool's
 
 Following this, you can inspect the data by using commands to grep patterns, the reads having certain qualifications or even modify them. In this case, it is better to be aware of some online tutorials regarding data inspection and manipulation on command line. A few examples are shared below.
 
-> Let's say you are looking for this sequence as pattern: AGTAGTCT
+> Let's say you are looking for this sequence as pattern: AGTAGTCT, which you might replace with some adapters etc.
 ```
 grep -c AGTAGTCT /your/path/to/samples/your.fastq
 ```
