@@ -26,7 +26,7 @@ Before starting, I would like to share my favourite beginner friendly analysis r
 I usually run preliminary inspection of raw fastq files (grep, cat, awk, seed etc.), quality control of the raw data (fastqc), relevant trimming (adapter or some poly-nucleotides), in silico rRNA removal (where applicable), alignment (STAR, STARSolo, CellRanger, bowtie etc.), raw count data retrieval (featureCounts, HTseq, MGCount) on the server as there are more space and cores available. Next, I do downstream analysis (might be generating cool plots of preliminary data specs, differential gene expression/heteregeneoity analysis via Seurat) on R and gene enrichment analysis with/out online tools using the differential features without using the server.
 
 > Tips: Useful Commands to Learn Before You Start
-> *cd* (to go to a directory and set it), *ls* (list the files in the directory), *mkdir* (create a new directory/folder), *rm* (remove files/folders), *scp* or *cp* (copy files/folders from one to another), *pwd* (recall your current location/directory), *gunzip* (to unzip zipped files)
+>   *cd* (to go to a directory and set it), *ls* (list the files in the directory), *mkdir* (create a new directory/folder), *rm* (remove files/folders), *scp* or *cp* (copy files/folders from one to another), *pwd* (recall your current location/directory), *gunzip* (to unzip zipped files)
 
 -------------------
 
