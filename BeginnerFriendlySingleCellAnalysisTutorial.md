@@ -8,10 +8,14 @@ Let's see how it will work!
 (Please note that bioinformatics is a huge field requiring intensive skills, therefore please do not expect to be an expert after reading this at night and suddenly become one in the morning. Thanks for your understanding and cooperation.)
 
 
-There will be some tools, we will be using and two main programming workspace that we need to get familiar with the syntax.
+There will be some tools that we will be using and two main programming workspace that we need to get familiar with the syntax and commands.
 Firstly, I use *FileZilla* to have desktop-similar workspace in the server. I recommend you to download from here, if you prefer such things: https://filezilla-project.org/download.php?type=client .
 Secondly, *Command Line Tools* (for Linux/Ubuntu based servers, Ubuntu LTS for Windows or Terminal of Mac) and *R* (https://www.r-project.org/about.html and its IDE-RStudio: https://posit.co/download/rstudio-desktop/). 
 
-
+Before starting, I would like to share my favourite beginner friendly analysis resources:
+1. For Bulk RNA-Seq analysis and udnerstand the concepts: 
+  Intro2RNASeq- https://chagall.med.cornell.edu/RNASEQcourse/Intro2RNAseq.pdf
+3. For Single Cell analysis and understand the concepts: 
+  https://www.singlecellcourse.org/
 
 
