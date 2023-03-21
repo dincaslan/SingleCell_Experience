@@ -32,7 +32,16 @@ ssh name@IP_address
 > name is your directory name that you want to access (e.g. JDoe), and IP_address is the bunch of numbers (e.g. 01.010.010.01)
 Once you ssh, it will ask your password for the given directory that you are requesting to access. You need to type that, too!
 
+> Just to check where you are before starting any sort of analysis, you can try pwd() to recall your current location
+
 ## Running FastQC and Preliminary Read Inspection
 
+First of all, you need to install the relevant quality control tool to the workspace and activate it. (After you installed anaconda or minconda, and setting enviroment active), you can install the tool (in our case, Babraham Bionformatics' FastQC: https://anaconda.org/bioconda/fastqc).
 
+> Just to make sure, you can include full path of the tool while calling it
+```
+/your/path/to/FastQC/fastqc /your/path/to/samples/*.fastq.gz
+```
+> *. option allows you to run FastQC on all the sample in the given directory
+> You will find the report files in the directory you run your analysis
 
