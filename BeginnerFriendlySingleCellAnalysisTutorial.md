@@ -44,4 +44,22 @@ First of all, you need to install the relevant quality control tool to the works
 ```
 > *. option allows you to run FastQC on all the sample in the given directory
 > You will find the report files in the directory you run your analysis
+If you are not sure what to expect from this report, please check out the tool's own page as a reference: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+
+
+Following this, you can inspect the data by using commands to grep patterns, the reads having certain qualifications or even modify them. In this case, it is better to be aware of some online tutorials regarding data inspection and manipulation on command line. A few examples are shared below.
+
+> Let's say you are looking for this sequence as pattern: AGTAGTCT
+```
+grep -c AGTAGTCT /your/path/to/samples/your.fastq
+```
+> The code above returns the number of occurances of this pattern in your fastq file
+```
+cat /your/path/to/samples/your.fastq | grep AGTAGTCT | head 20
+```
+> The code above returns first 20 occurances of this pattern in your fastq file with corresponding read lines/sequences containing
+```
+zcat /your/path/to/samples/your.fastq.gz | grep AGTAGTCT | tail 20
+```
+> same above for the tail, and except if the file is zipped
 
