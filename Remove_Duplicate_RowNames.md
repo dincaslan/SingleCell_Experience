@@ -14,6 +14,8 @@ I will share my partial code here, modified from *diazdc*'s example in the link 
 
 > If you like to see how it works View(as.data.frame(YourSample@assays[["RNA"]]@data@Dimnames[[1]]))
 
+It basically renames the repeated names with an order. Let's say you have features with Gene A two times, then it will become GeneA.1, GeneA.2. 
+
 ********ONLY CODE PLEASE********
 
 ```R
