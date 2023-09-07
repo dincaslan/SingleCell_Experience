@@ -9,7 +9,7 @@ I will share my partial code here, modified from *diazdc*'s example in the link 
   features <- read_tsv("/Your/Path/to/STARSolo_Example/Gene/filtered/features.tsv", col_names = FALSE)
   names <- make.unique(features$X2)
   features$X2 <- names
-  write_tsv(features, "Your/Path/to/STARSolo_Example/Gene/filtered/features.tsv", col_names = FALSE)
+  write_tsv(features, "/Your/Path/to/STARSolo_Example/Gene/filtered/features.tsv", col_names = FALSE)
 ```
 
 > If you like to see how it works View(as.data.frame(YourSample@assays[["RNA"]]@data@Dimnames[[1]]))
