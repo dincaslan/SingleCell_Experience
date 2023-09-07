@@ -1,8 +1,8 @@
-Sometimes there is no consensus on which sequences represents the common name as diazdc explained here in this pot https://github.com/satijalab/seurat/issues/1710
-, so you might want to rename your feature csv file of the STARSolo or CellRanger single-cell count matrix folder.
-I will share my partial code here, modified from diazdc's example in the link given above.
+Sometimes there is no consensus on which sequences represents the common name as *diazdc* explained here in this post https://github.com/satijalab/seurat/issues/1710
+, so you might want to rename your feature csv file of the STARSolo or CellRanger single-cell count folder.
+I will share my partial code here, modified from *diazdc*'s example in the link given above.
 
-> # ATTENTION! You might want to copy and save the original feature csv file to somewhere else just in case!
+> **ATTENTION**! You might want to copy and save the original feature csv file to somewhere else just in case!
 
 ```R
 # Change the duplicated row names in STARSolo outcome folder
