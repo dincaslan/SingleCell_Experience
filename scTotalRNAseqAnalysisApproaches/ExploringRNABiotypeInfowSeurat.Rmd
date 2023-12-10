@@ -17,5 +17,5 @@ pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^ENSG", col.name
 pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^SCARNA", col.name = "percent.scaRNA")
 
 # Then you can plot with Seurat violin plots as an example
-VlnPlot(pbmc_combined, features = c("percent.miRNA", "percent.tRNA","percent.piRNA","percent.IGKV", "percent.lincRNA","percent.snoRNA", "percent.snRNA", "percent.nuclearmtRNA"),adjust=1, ncol = 4, pt.size = 0.0001) & theme(axis.title.x = element_blank(), axis.text=element_text(size=6), axis.text.x = element_text(angle = 90))
+VlnPlot(pbmc_combined, features = c("percent.miRNA", "percent.tRNA","percent.piRNA","percent.IGKV", "percent.lincRNA","percent.snoRNA", "percent.snRNA", "percent.nuclearmtRNA"),adjust=1, ncol = 4, pt.size = 0.0001) & theme(axis.title.x = element_blank(), axis.text=element_text(size=6), axis.text.x = element_text(angle = 90) , split.by = "orig.ident", group.by = "HTO_classification")
 # The final plot will include the sample specific Violin plots for the distribution of selected percentages among each single cell of selected sample
