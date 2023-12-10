@@ -1,6 +1,6 @@
 # Some exploratory analysis with cell cycle regressed cells&conditons
 pbmc_combined<-readRDS("/Your/Path/to/Folder/mergedfilteredregressed.rds")
-Idents(pbmc_combined)<- "orig.ident" # conditons
+Idents(pbmc_combined)<- "orig.ident" # samples
 
 # Seurat has PercentageFeatureSet function for you to explore the percentage of reads for each cell
 # And if you have a comprehensive GTF file having all these annotations together. not just mRNA and some known ncRNAs...
