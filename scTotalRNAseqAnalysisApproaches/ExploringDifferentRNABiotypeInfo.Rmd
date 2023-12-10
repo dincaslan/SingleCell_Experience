@@ -1,4 +1,4 @@
-# Some explatory analysis with cell cycle regressed cells&conditons
+# Some exploratory analysis with cell cycle regressed cells&conditons
 pbmc_combined<-readRDS("/Your/Path/to/Folder/mergedfilteredregressed.rds")
 Idents(pbmc_combined)<- "orig.ident"
 
