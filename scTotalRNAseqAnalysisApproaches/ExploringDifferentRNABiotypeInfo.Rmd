@@ -1,0 +1,21 @@
+# Some explatory analysis with cell cycle regressed cells&conditons
+pbmc_combined<-readRDS("/Your/Path/to/Folder/mergedfilteredregressed.rds")
+Idents(pbmc_combined)<- "orig.ident"
+
+# Seurat has PercentageFeatureSet function for you to explore the percentage of reads for each cell
+# And if you have a comprehensive GTF file having all these annotations together. not just mRNA and some known ncRNAs...
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^hsa-", col.name = "percent.miRNA")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^tRNA-", col.name = "percent.tRNA")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^PIRNA", col.name = "percent.piRNA")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^Y-RNA", col.name = "percent.Y_RNA")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^IGKV", col.name = "percent.IGKV")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^LINC", col.name = "percent.lincRNA")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^SNORD", col.name = "percent.snoRNA")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = c("^U\\d+","RNVU"), col.name = "percent.snRNA") # RNVU is for U1 variants
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^nmt-", col.name = "percent.nuclearmtRNA")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^ENSG", col.name = "percent.noveltranscript")
+pbmc_combined <- PercentageFeatureSet(pbmc_combined, pattern = "^SCARNA", col.name = "percent.scaRNA")
+
+# Then you can plot with Seurat violin plots as an example
+VlnPlot(pbmc_combined, features = c("percent.miRNA", "percent.tRNA","percent.piRNA","percent.IGKV", "percent.lincRNA","percent.snoRNA", "percent.snRNA", "percent.nuclearmtRNA"),adjust=1, ncol = 4, pt.size = 0.0001) & theme(axis.title.x = element_blank(), axis.text=element_text(size=6), axis.text.x = element_text(angle = 90))
+# The final plot will include the sample specific Violin plots for the distribution of selected percentages among each single cell of selected sample
