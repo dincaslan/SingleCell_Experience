@@ -1,5 +1,5 @@
 Let's say you have paired end reads. If you used templete switch oligo, this might be useful before processing. 
-Cutting 5’ 3Gs from R2 reads using cutadapt
+Cutting 5’ 3Gs from R2 reads using cutadapt <https://cutadapt.readthedocs.io>
 
 > rawDir=/Your/Directory/rawData/
 
