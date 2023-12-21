@@ -13,7 +13,7 @@ pip install pandas==1.4.0
 > pip install pandas==1.x.x
 
 
-# Useful Links/Discussions Regarding Parameter Optimizations
+### Useful Links/Discussions Regarding Parameter Optimizations
 > Small RNA mapping settings optimizations
 https://github.com/alexdobin/STAR/issues/891
 
