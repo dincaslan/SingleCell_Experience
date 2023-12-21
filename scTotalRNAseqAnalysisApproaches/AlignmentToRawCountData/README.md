@@ -11,3 +11,18 @@ pip install pandas==1.4.0
 > upgrade to the latest version once you are done
 
 > pip install pandas==1.x.x
+
+
+# Useful Links/Discussions Regarding Parameter Optimizations
+> Small RNA mapping settings optimizations
+https://github.com/alexdobin/STAR/issues/891
+
+> Filtering reads - matching fragments
+https://groups.google.com/g/rna-star/c/UCUM5x9cXGk?pli=1
+
+> Anchor Setting for multimapping
+https://github.com/alexdobin/STAR/issues/243
+
+> Alignment and penalty scores
+https://github.com/alexdobin/STAR/issues/408
+
