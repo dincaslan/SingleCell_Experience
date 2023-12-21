@@ -11,7 +11,7 @@ I will be sharing the ways I have tried with simple modifications or implementat
 * For bulk total RNA-seq, an alternative approach for the data analysis to look for would be [MGCount](https://github.com/hitaandrea/MGcount/tree/main)
 
 ##### Overall Task
-You can run the processes in single script with && after each step is done individually. In this case, it might take a little longer. You might want to run everything as a background task. There are multiple commands for this. I prefer tmux.
+You can run the processes in single script with && after each step is done individually. In this case, it might take a little longer. You might want to run everything as a background task. There are multiple commands for this. I prefer [tmux](https://github.com/tmux/tmux/wiki).
 > create the task
 
 tmux new -s NameTheTask
