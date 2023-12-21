@@ -8,6 +8,6 @@ For HTO and ADT CITE-Seq-Count tool, the Pyhton version might need to be downgra
 pip install pandas==1.4.0
 ```
 
-> upgrade to latest version
+> upgrade to the latest version once you are done
 
-> pip install pandas==1.5.x
+> pip install pandas==1.x.x
