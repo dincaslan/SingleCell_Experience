@@ -5,5 +5,5 @@ If you are looking for how to make use of the data, then you might need to preli
 I will be sharing the ways I have tried with simple modifications or implementations on common and available tutorials (e.g., Seurat-based).
 
 #### Recommendations
-* For single-cell total RNA-seq, an alternative approach would be [VASA-Seq](https://github.com/hemberg-lab/VASAseq_2022)
-* For bulk total RNA-seq, an alternative would be [MGCount](https://github.com/hitaandrea/MGcount/tree/main)
+* For single-cell total RNA-seq, an alternative approach for the data analysis to look for would be [VASA-Seq](https://github.com/hemberg-lab/VASAseq_2022)
+* For bulk total RNA-seq, an alternative approach for the data analysis to look for would be [MGCount](https://github.com/hitaandrea/MGcount/tree/main)
