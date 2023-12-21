@@ -1,13 +1,9 @@
-In this section, the pre-processing of raw reads was explained with separate .md file for each step.
+In this section, the alignment of pre-processed reads and raw count data retrieval with STARSolo was explained. 
 
-The for loops are used for one-step processing for all samples with an order.
+Morever, if there other modalities (HTO, ADT tags), you need to retrieve the count data separately. No need for alignment as they are NOT RNA reads, they are only oligo-tags attached to specific cell surface antibodies with known sequence.
 
-Activation of conda in the environment you are using in command line is highly recommended before proceeding.
+For HTO and ADT CITE-Seq-Count tool, the Pyhton version might need to be downgraded to 1.4.0 as shown below:
 
-The order of pre-processing to the alignment is given below:
-
-1. PreCut.md (<https://github.com/dincaslan/SingleCell_Experience/blob/master/scTotalRNAseqAnalysisApproaches/PreProcessing/PreCut.md>)
-2. inSilicorRNARemoval.md (<https://github.com/dincaslan/SingleCell_Experience/blob/master/scTotalRNAseqAnalysisApproaches/PreProcessing/inSilicorRNARemoval.md>)
-3. PreProcessingCut.md (<https://github.com/dincaslan/SingleCell_Experience/blob/master/scTotalRNAseqAnalysisApproaches/PreProcessing/PreProcessingCut.md>)
-
-Alternatively, you can combine step 1 and 3 in a single step and proceed for step 2.
+```shell
+pip install pandas==1.4.0
+```
