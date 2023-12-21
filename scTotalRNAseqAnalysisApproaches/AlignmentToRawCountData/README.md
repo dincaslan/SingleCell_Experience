@@ -14,6 +14,10 @@ pip install pandas==1.4.0
 
 
 ### Useful Links/Discussions Regarding Parameter Optimizations
+
+> STAR manual
+https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
+
 > Small RNA mapping settings optimizations
 https://github.com/alexdobin/STAR/issues/891
 
