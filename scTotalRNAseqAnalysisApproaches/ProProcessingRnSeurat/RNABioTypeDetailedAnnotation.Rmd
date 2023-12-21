@@ -1,0 +1,34 @@
+# Read the gtf file and match the corresponding columns from /Your/Genome/Directory/Hsapiens.GRCh38EnsemblcustomMoreNC.gtf selected and /Your/Genome/Directory/cellranger-7.1.0/GRCh38EnsemblAllNC/genes/genes.gtf
+# Implemented in R
+# Import libraries (these packages are required for the gtf integration and further processing of the data table)
+
+```r
+library(Hmisc)
+library(parallel)
+library(plyr)
+library(dplyr)
+#BiocManager::install("rtracklayer", force = TRUE)
+library(rtracklayer)
+```
+> Modify it based on your interests.
+
+```r
+gtf.all <- rtracklayer::import("/Your/Genome/Directory/genes.gtf.gz")
+head(gtf.all)
+gtf.all <- as.data.frame(gtf.all)
+# Select relevant labels
+gtf.all <- gtf.all[, c("width", "type" , "gene_name", "gene_id", "transcript_name", "transcript_id", "gene_biotype", "transcript_biotype")]
+gtf.allExon <- gtf.all[gtf.all$type=="exon",]
+# gtf has more than one row for each gene. You do not want repetitons on the name coloumn.
+# gene/transcript length info is not crucial for me. So, just took the average here.
+gtfAllExonMean <- aggregate(width ~ gene_name, gtf.allExon, FUN = function(x) if(is.numeric(x)) mean(x) else unique(x))
+gtfAllExonMean <- merge(gtfAllExonMean, gtf.allExon, by= 'gene_name')
+gtfAllExonMean <- distinct(gtfAllExonMean, gene_name, .keep_all = TRUE)
+gtfAllExonMean <- gtfAllExonMean[,-3]
+colnames(gtfAllExonMean)[2] <- "avgexonlen"
+```
+# You might want to keep this somewhere to not to repeat everytime
+
+```r
+write_csv(gtfAllExonMean, "/Your/Directory/BiotypeAndLenghts.csv")
+```
