@@ -85,16 +85,49 @@ The remaning part will be divide into two main sessions. In the first session, w
 
 ### Manual Processing for Each Step
 
+-------------------
+
+#### CutAdapt
 
 -------------------
 
-### Single Cell Demultiplexing
+#### In Silico rRNA Depletion
+
+-------------------
+
+#### Single Cell Demultiplexing/Multi-modal Sequnecing
+
+-------------------
+
+##### Cell Ranger
+
+-------------------
+
+##### STARSolo
+
+-------------------
+
+### Alignment and Raw Count Data Retrieval
+
 
 -------------------
 
 #### Cell Ranger
 
 -------------------
+
+##### A sample with a single condition
+
+-------------------
+
+##### A sample with multiple conditions (multiplex)
+
+-------------------
+
+##### A sample with multiple conditions and cell surface markers (multi-modal)
+
+-------------------
+
 
 #### STARSolo
 
