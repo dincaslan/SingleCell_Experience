@@ -165,4 +165,6 @@ DataAltogether <- subset(DataAltogether, idents = "Negative", invert = TRUE)
 HTOHeatmap(DataAltogether, assay = "HTO") # visualize
 DataAltogether <- subset(DataAltogether, idents = "Singlet") #choose only singlets for downstream analysis
 
+# You have more space! Great, because you might want to save this one to avoid creating again and again: RData object to load at any time
+saveRDS(DataAltogether, file="/YOUR/PATH/TO/DemultiplexeddDataset.rds") 
 ```
