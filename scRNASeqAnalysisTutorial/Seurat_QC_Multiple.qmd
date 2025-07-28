@@ -1,1 +1,168 @@
+---
+title: "QC_Detailed"
+author: "Fatma Betul DINCASLAN"
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+    keep-md: true
+editor: visual
+date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
+---
 
+```{r}
+# My fav relevant libraries to be downloaded
+library(Seurat) #upgrade 4.3.0 to 5.2.0 the latest now
+library(ggplot2)
+library(patchwork)
+library(scplotter)
+library(dplyr)
+library(tidyverse)
+library(grid)
+#.rs.restartR() # in case of absurdity you observe for the packages while running
+```
+
+```{r}
+# Paralllelizatin i svalaible in Seurat with https://satijalab.org/seurat/articles/future_vignette.html
+library(future)
+#plan()
+# Parallelization is sometimes necessary when you are doing the analysis on your computer to speed the process up
+plan("multicore", workers = 16)
+#plan("multisession", workers = 8) #depending on available cores on your computer
+plan()
+options(future.globals.maxSize = 8000 * 1024^2)
+```
+
+```{r}
+# Combine conditions from cell ranger data
+S1data<-Read10X(data.dir="/YOUR/PATH/TO/Sample1/sample_filtered_feature_bc_matrix")
+S2data<-Read10X(data.dir="/YOUR/PATH/TO/Sample2/sample_filtered_feature_bc_matrix")
+S3data<-Read10X(data.dir="/YOUR/PATH/TO/Sample3/sample_filtered_feature_bc_matrix")
+
+S1<-CreateSeuratObject(counts=S1data[[1]], assay = "RNA", project = "ProperNameIt")
+S2<-CreateSeuratObject(counts=S2data[[1]], assay = "RNA", project = "ProperNameIt2")
+S3<-CreateSeuratObject(counts=S3data[[1]], assay = "RNA", project = "ProperNameIt3")
+
+# sample hashtag barcodes
+S1[["HTO"]] <- CreateAssayObject(counts = S1data[[3]])
+S2[["HTO"]] <- CreateAssayObject(counts = S2data[[3]])
+S3[["HTO"]] <- CreateAssayObject(counts = S3data[[3]])
+
+# cell surface antibody detection barcodes
+S1[["ADT"]] <- CreateAssayObject(counts = S1data[[2]])
+S2[["ADT"]] <- CreateAssayObject(counts = S2data[[2]])
+S3[["ADT"]] <- CreateAssayObject(counts = S3data[[2]])
+
+MergedDataset <- merge(S1, y = c(S2, S3)) # merges without integration
+
+# ## Add into other assays where necessary
+# nameit<- c("CD3-TotalA", "CD4-TotalA","CD8-TotalA")
+# newname <- c("CD3", "CD4", "CD8")
+# rownames(S1[["ADT"]]) <- plyr::mapvalues(x = rownames(S1[["ADT"]]), from = nameit, to = newname)
+# # # Let's say you want to remove CD3 and unmapped
+# # ADT.selected <- adts[c(1),]
+```
+
+```{r}
+# To check the overall mitocondrial RNA (mtRNA) percentage
+MergedDataset <- PercentageFeatureSet(Combine, pattern = "^MT-", col.name = "percent.mt")
+
+# Violin plots for early visualization
+VlnPlot(MergedDataset, features = c("nCount_RNA", "nFeature_RNA", "percent.mt"),adjust=1, ncol = 3, pt.size = 0.0001, group.by = "orig.ident") &  
+  theme(axis.title.x = element_blank(), axis.text=element_text(size=6), axis.text.x = element_text(angle = 90)) # I like to adjust with the axix elements
+
+# Filtered cells and relevant metadata to be saved as RDS file to recall later for the downstream analysis: .RData object to load at any time
+saveRDS(MergedDataset, file="/YOUR/PATH/TO/YourMergedDataset.rds")
+```
+
+```{r}
+# Let's inspect the metadata as dataframe
+metadata <-  MergedDataset@meta.data
+
+# number of cells per sample
+metadata %>% 
+  	ggplot(aes(x=orig.ident, fill=orig.ident)) + 
+  	geom_bar() +
+  	theme_classic() +
+  	theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  	theme(plot.title = element_text(hjust=0.5, face="bold")) +
+  	ggtitle("Cells Detected")
+
+# UMI Counts (transcripts) per Cell
+metadata %>%
+  ggplot(aes(x=nCount_RNA, fill= orig.ident)) +
+  geom_density(alpha = 0.2) +
+  scale_x_log10() +
+  theme_classic() +
+  geom_vline(xintercept = 500) # you can change the intercept
+
+# Genes Detected per Cell
+metadata %>%
+  ggplot(aes(color=orig.ident, x=nFeature_RNA, fill= orig.ident)) +
+  geom_density(alpha = 0.2) +
+  theme_classic() +
+  scale_x_log10() +
+  geom_vline(xintercept = 200) # you can change the intercept
+
+# # Overall Complexity of the Gene Expression - genes detected per UMI (novelty score)
+# metadata %>%
+#   ggplot(aes(color=orig.ident,x=log10GenesPerUMI, fill= orig.ident)) +
+#   geom_density(alpha = 0.2) +
+#   theme_classic() +
+#   geom_vline(xintercept = 0.80) # you can change the intercept
+
+# Mitocondria Percentage per Cell
+metadata %>%
+  ggplot(aes(color=orig.ident, x=percent.mt, fill=orig.ident)) +
+  geom_density(alpha = 0.2) +
+  scale_x_log10() +
+  theme_classic() +
+  geom_vline(xintercept = c(5,7.5,10)) # you can change the intercept to inspect further
+
+```
+
+``{r}
+# Filter out low quality cells using selected thresholds - these will change with experiment
+filtered_data <- subset(x = MergedDataset, 
+                            subset= (nCount_RNA >= 500) &
+                              (nCount_RNA < 30000) & 
+                              (nFeature_RNA >= 2000) & 
+                              (nFeature_RNA < 10000) & 
+                              (percent.mt > 0) &
+                              (percent.mt < 7.5)) #some cells higher some cells lower mtRNA
+
+# Visualize
+VlnPlot(filtered_data, features = c("nCount_RNA", "nFeature_RNA", "percent.mt"),adjust=1, ncol = 3, pt.size = 0.0001, group.by = "orig.ident") &  
+  theme(axis.title.x = element_blank(), axis.text=element_text(size=6), axis.text.x = element_text(angle = 90)) 
+
+# Create .RData object to load at any time
+saveRDS(filtered_data, file="/YOUR/PATH/TO/FilteredMergedDataset.rds") #depending on how much space you have in your computer/server as well
+
+```
+
+If you have multiple modalities, you might need to demultiplex as well.
+
+```{r}
+DefaultAssay(filtered_data)="RNA"
+DataAltogether<- NormalizeData(filtered_data, normalization.method = "LogNormalize", scale.factor = 10000)
+
+DefaultAssay(DataAltogether)="HTO"
+# Normalize HTO data with centered log-ratio (CLR) transformation
+DataAltogether <- NormalizeData(PhenoAll, assay = "HTO", normalization.method = "CLR")
+DataAltogether <- HTODemux(DataAltogether, assay = "HTO", positive.quantile = 0.99)
+Idents(DataAltogether) <- "HTO_classification.global"
+# Global classification results
+table(DataAltogether$HTO_classification.global)
+ # Doublet Negative  Singlet 
+ #     XXx       YYy     ZZz 
+VlnPlot(DataAltogether, features = "nCount_RNA", pt.size = 0.1, log = TRUE)
+VlnPlot(DataAltogether, features = "nCount_ADT", pt.size = 0.1, log = TRUE) + stat_summary(fun.y = median, geom='point', size = 10, colour = "black", shape = 95)
+#VlnPlot(DataAltogether, features = "nCount_ADT", pt.size = 0.1, log = TRUE, split.by = "HTO_classification") +
+#stat_summary(fun.y = median, geom='point', size = 10, colour = "black", shape = 95)
+DataAltogether <- subset(DataAltogether, idents = "Negative", invert = TRUE)
+HTOHeatmap(DataAltogether, assay = "HTO") # visualize
+DataAltogether <- subset(DataAltogether, idents = "Singlet") #choose only singlets for downstream analysis
+
+```
