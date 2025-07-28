@@ -67,7 +67,7 @@ MergedDataset <- merge(S1, y = c(S2, S3)) # merges without integration
 
 ```{r}
 # To check the overall mitocondrial RNA (mtRNA) percentage
-MergedDataset <- PercentageFeatureSet(Combine, pattern = "^MT-", col.name = "percent.mt")
+MergedDataset <- PercentageFeatureSet(MergedDataset, pattern = "^MT-", col.name = "percent.mt")
 
 # Violin plots for early visualization
 VlnPlot(MergedDataset, features = c("nCount_RNA", "nFeature_RNA", "percent.mt"),adjust=1, ncol = 3, pt.size = 0.0001, group.by = "orig.ident") &  
