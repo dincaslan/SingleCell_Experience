@@ -78,7 +78,7 @@ saveRDS(MergedDataset, file="/YOUR/PATH/TO/YourMergedDataset.rds")
 ```
 
 ``{r}
-# Let's inspect the metadata as dataframe
+# Let's inspect the metadata as dataframe, based on this: https://hbctraining.github.io/scRNA-seq/lessons/04_SC_quality_control.html
 metadata <-  MergedDataset@meta.data
 
 # number of cells per sample
