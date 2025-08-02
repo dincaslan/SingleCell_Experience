@@ -1,0 +1,58 @@
+---
+title: "CellCycleRegression_Workflows"
+author: "Fatma Betul DINCASLAN"
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+    keep-md: true
+editor: visual
+date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
+---
+You can always visit Seurat webpage for detailed workflow: https://satijalab.org/seurat/articles/cell_cycle_vignette.html
+or https://satijalab.org/seurat/articles/cell_cycle_vignette.html#alternate-workflow
+
+``{r}
+DefaultAssay(DataAltogether)="RNA"
+# To see whether cell cycle effects strongly mitigated in PCA
+CCR_Data<- NormalizeData(DataAltogether)
+CCR_Data <- FindVariableFeatures(CCR_Data, selection.method = "mean.var.plot")
+# Identify the 10 most highly variable genes
+top10 <- head(VariableFeatures(CCR_Data), 10)
+# just to observe cell cycle effects on the separation
+CCR_Data <- ScaleData(CCR_Data, features = rownames(CCR_Data)) #without cell cycle regression first
+CCR_Data <- RunPCA(CCR_Data, features = VariableFeatures(CCR_Data))
+DimPlot(CCR_Data, split.by = 'orig.ident')
+ElbowPlot(CCR_Data) # I always prefer to inspect the PCA reduction before deciding the dimensions
+```
+
+``{r}
+s.genes <- cc.genes$s.genes
+g2m.genes <- cc.genes$g2m.genes
+CCR_Data <- CellCycleScoring(CCR_Data, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
+# Visualize the distribution of cell cycle markers across
+RidgePlot(CCR_Data, features = c("PCNA", "TOP2A", "MCM6", "MKI67"), ncol = 2)
+RidgePlot(CCR_Data, features = c("PCNA", "TOP2A", "MCM6", "MKI67"), ncol = 2, group.by = "orig.ident")
+CCR_Data <- RunPCA(CCR_Data, features = c(s.genes, g2m.genes))
+DimPlot(CCR_Data, split.by = 'orig.ident')
+
+#CCR_Data$CC.Difference <- CCR_Data$S.Score - CCR_Data$G2M.Score
+```
+
+``{r}
+# then regress out cell cycle genes
+#CCR_Data <- ScaleData(CCR_Data, vars.to.regress = "CC.Difference", features = rownames(CCR_Data)) #alternative workflow
+CCR_Data <- ScaleData(CCR_Data, vars.to.regress = c("S.Score", "G2M.Score"), features = rownames(CCR_Data))
+
+# when running a PCA on cell cycle genes, actively proliferating cells remain distinct from G1
+# cells however, within actively proliferating cells, G2M and S phase cells group together
+CCR_Data <- RunPCA(CCR_Data, features = c(s.genes, g2m.genes))
+DimPlot(CCR_Data, split.by = 'orig.ident')
+
+CCR_Data <- RunPCA(CCR_Data, features = VariableFeatures(CCR_Data))
+DimPlot(CCR_Data, split.by = 'orig.ident')
+ElbowPlot(CCR_Data)
+# I think the cell cycle regression should be handled carefully depending on the research question and the data
+```
